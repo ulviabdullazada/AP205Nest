@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Http;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Nest.Models
 {
@@ -19,5 +21,13 @@ namespace Nest.Models
         public int CategoryId { get; set; }
         public Category Category { get; set; }
         public List<ProductImage> ProductImages { get; set; }
+        [NotMapped]
+        public List<IFormFile> Photos { get; set; }
+        [NotMapped]
+        public IFormFile PhotoFront { get; set; }
+        [NotMapped]
+        public IFormFile PhotoBack { get; set; }
+        [NotMapped]
+        public List<int> PhotoIds { get; set; }
     }
 }

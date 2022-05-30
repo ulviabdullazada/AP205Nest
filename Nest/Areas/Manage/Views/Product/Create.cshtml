@@ -70,7 +70,7 @@
                     <h4>Basic</h4>
                 </div>
                 <div class="card-body">
-                    <form method="post">
+                    <form method="post" enctype="multipart/form-data">
                         <div class="mb-4">
                             <label asp-for="Name" class="form-label"></label>
                             <input asp-for="Name" placeholder="Type here" class="form-control" />
@@ -115,6 +115,21 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="card-body">
+                            <div class="input-upload">
+                                <img src="~/admin/assets/imgs/theme/upload.svg" alt="" />
+                                <div>
+                                    <label asp-for="PhotoFront" class="form-label text-start">Image for front</label>
+                                    <input asp-for="PhotoFront" class="form-control" />
+                                    <span class="text-danger" asp-validation-for="PhotoFront"></span>
+                                    <label asp-for="PhotoBack" class="form-label">Image for back</label>
+                                    <input asp-for="PhotoBack" class="form-control" />
+                                    <span class="text-danger mb-2" asp-validation-for="PhotoBack"></span>
+                                </div>
+                                <input asp-for="Photos" class="form-control mt-2" />
+                                <span class="text-danger" asp-validation-for="Photos"></span>
+                            </div>
+                        </div>
                         <div class="mb-4 d-flex justify-content-end">
                             <div>
                                 <button type="submit" class="btn btn-md rounded font-sm hover-up ms-auto">Create</button>
@@ -126,25 +141,10 @@
             </div>
             <!-- card end// -->
         </div>
-        <div class="col-lg-5">
-            <div class="card mb-4">
-                <div class="card-header">
-                    <h4>Media</h4>
-                </div>
-                <div class="card-body">
-                    <div class="input-upload">
-                        <img src="~/admin/assets/imgs/theme/upload.svg" alt="" />
-                        <input class="form-control" type="file" />
-                    </div>
-                </div>
-            </div>
-            <!-- card end// -->
-        </div>
     </div>
 </section>
+<partial name="_ValidationPartial" />
 @section scripts{
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.4/jquery.validate.min.js" integrity="sha512-FOhq9HThdn7ltbK8abmGn60A/EMtEzIzv1rvuh+DqzJtSGq8BRdEN0U+j0iKEIffiw/yEtVuladk6rsG4X6Uqg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js" integrity="sha512-o6XqxgrUsKmchwy9G5VRNWSSxTS4Urr4loO6/0hYdpWmFUfHqGzawGxeQGMDqYzxjY9sbktPbNlkIQJWagVZQg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
         $(".form-select").select2();
     </script>

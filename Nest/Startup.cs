@@ -5,6 +5,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Nest.DAL;
+using Nest.Utilies;
+using System.IO;
 
 namespace Nest
 {
@@ -56,6 +58,10 @@ namespace Nest
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            ///// Constants //////
+            Constant.ImagePath = Path.Combine(env.WebRootPath,"assets","imgs");
+            /////         //////
         }
     }
 }

@@ -1,10 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Nest.DAL;
 using Nest.Models;
+using Nest.Utilies;
+using Nest.Utilies.Extensions;
 using Nest.ViewModels.Products;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -43,19 +47,64 @@ namespace Nest.Areas.Manage.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Product product)
+        public async Task<IActionResult> Create(Product product)
         {
+            ViewBag.Categories = _context.Categories.Where(c=>c.IsDeleted==false).ToList();
             if (!ModelState.IsValid)
             {
-                ViewBag.Categories = _context.Categories.Where(c=>c.IsDeleted==false).ToList();
                 return View();
             }
             if (_context.Products.Any(p=>p.Name.Trim().ToLower() == product.Name.Trim().ToLower()))
             {
-                ViewBag.Categories = _context.Categories.Where(c=>c.IsDeleted==false).ToList();
                 ModelState.AddModelError("Name","This name already exist");
                 return View();
             }
+            if (product.Photos != null)
+            {
+                foreach (var file in product.Photos)
+                {
+                    if (IsPhotoOk(file) != "")
+                    {
+                        ModelState.AddModelError("Photos", IsPhotoOk(file));
+                    }
+                }
+                foreach (var file in product.Photos)
+                {
+                    ProductImage image = new ProductImage
+                    {
+                        Image = await file.SaveFileAsync(Path.Combine(Constant.ImagePath, "shop")),
+                        IsFront = false,
+                        IsBack = false,
+                        Product = product
+                    };
+                    product.ProductImages.Add(image);
+                }
+            }
+            if (IsPhotoOk(product.PhotoFront) != "")
+            {
+                ModelState.AddModelError("PhotoFront", IsPhotoOk(product.PhotoFront));
+            }
+            if (IsPhotoOk(product.PhotoBack) != "")
+            {
+                ModelState.AddModelError("PhotoBack", IsPhotoOk(product.PhotoBack));
+            }
+            product.ProductImages = new List<ProductImage>();
+            product.ProductImages.Add(new ProductImage
+            {
+                Image = await product.PhotoFront.SaveFileAsync(Path.Combine(Constant.ImagePath, "shop")),
+                IsFront = true,
+                IsBack = false,
+                Product = product
+            });
+            product.ProductImages.Add(new ProductImage
+            {
+                Image = await product.PhotoBack.SaveFileAsync(Path.Combine(Constant.ImagePath, "shop")),
+                IsFront = false,
+                IsBack = true,
+                Product = product
+            });
+            
+            
             _context.Products.Add(product);
             _context.SaveChanges();
             return RedirectToAction(nameof(Index));
@@ -76,6 +125,31 @@ namespace Nest.Areas.Manage.Controllers
             }
             _context.SaveChanges();
             return RedirectToAction(nameof(Index));
+        }
+        public IActionResult Update(int id)
+        {
+            ViewBag.Categories = _context.Categories.Where(c=>c.IsDeleted==false).ToList();
+            Product product = _context.Products.Include(p=>p.Category).Include(p=>p.ProductImages).SingleOrDefault(p=>p.Id == id);
+            if (product == null) return NotFound();
+            return View(product);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Update(int id,Product product)
+        {
+            return Json(product.PhotoIds);
+        }
+        private string IsPhotoOk(IFormFile file)
+        {
+            if (file.CheckSize(500))
+            {
+                return $"{file.FileName} must be less than 500kb";
+            }
+            if (!file.CheckType("image/"))
+            {
+                return $"{file.FileName} is not image";
+            }
+            return "";
         }
     }
 }

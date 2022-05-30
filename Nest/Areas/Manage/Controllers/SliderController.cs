@@ -5,6 +5,7 @@ using Nest.Models;
 using System.IO;
 using Nest.Utilies.Extensions;
 using System.Threading.Tasks;
+using Nest.Utilies;
 
 namespace Nest.Areas.Manage.Controllers
 {
@@ -13,12 +14,9 @@ namespace Nest.Areas.Manage.Controllers
     {
         private AppDbContext _context{ get;}
 
-        private readonly IWebHostEnvironment _env;
-
-        public SliderController(AppDbContext context, IWebHostEnvironment env)
+        public SliderController(AppDbContext context)
         {
             _context = context;
-            _env = env;
         }
         public ActionResult Index()
         {
@@ -45,7 +43,7 @@ namespace Nest.Areas.Manage.Controllers
                 ModelState.AddModelError("Photo", "File must be image");
                 return View();
             }
-            slider.Image = await slider.Photo.SaveFileAsync(Path.Combine(_env.WebRootPath, "assets", "imgs", "slider"));
+            slider.Image = await slider.Photo.SaveFileAsync(Path.Combine(Constant.ImagePath, "slider"));
             await _context.Sliders.AddAsync(slider);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
@@ -56,9 +54,9 @@ namespace Nest.Areas.Manage.Controllers
         {
             Slider slider = _context.Sliders.Find(id);
             if (slider == null) return NotFound();
-            if (System.IO.File.Exists(Path.Combine(_env.WebRootPath, "assets", "imgs", "slider",slider.Image)))
+            if (System.IO.File.Exists(Path.Combine(Constant.ImagePath, "slider",slider.Image)))
             {
-                System.IO.File.Delete(Path.Combine(_env.WebRootPath, "assets", "imgs", "slider", slider.Image));
+                System.IO.File.Delete(Path.Combine(Constant.ImagePath, "slider", slider.Image));
             }
             _context.Sliders.Remove(slider);
             _context.SaveChanges();

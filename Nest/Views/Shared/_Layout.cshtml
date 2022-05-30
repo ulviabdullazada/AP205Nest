@@ -113,9 +113,6 @@
         </div>
     </div>
     <header class="header-area header-style-1 header-height-2">
-        <div class="mobile-promotion">
-            <span>Grand opening, <strong>up to 15%</strong> off all items. Only <strong>3 days</strong> left</span>
-        </div>
         <div class="header-middle header-middle-ptb-1 d-none d-lg-block">
             <div class="container">
                 <div class="header-wrap">
@@ -228,9 +225,9 @@
                         <div class="main-menu main-menu-padding-1 main-menu-lh-2 d-none d-lg-block font-heading">
                             <nav>
                                 <ul>
-                                    <li><a class="active" href="index.html">Home</a></li>
-                                    <li><a href="page-about.html">About</a></li>
-                                    <li><a href="shop-grid-right.html">Shop</a></li>
+                                    <li><a class="active" asp-controller="Home" asp-action="Index">Home</a></li>
+                                    <li><a asp-controller="Home" asp-action="About">About</a></li>
+                                    <li><a asp-controller="Product" asp-action="Index">Products</a></li>
                                     <li>
                                         <a href="blog-category-grid.html">Blog</a>
                                     </li>
