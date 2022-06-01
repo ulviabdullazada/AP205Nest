@@ -3,8 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using Nest.DAL;
 using Nest.Models;
 using Nest.ViewModels;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -24,7 +22,6 @@ namespace Nest.Controllers
             {
                 Sliders = await _context.Sliders.ToListAsync(),
                 Categories = await _context.Categories.Where(c=>c.IsDeleted==false).ToListAsync(),
-                Products = await query.OrderByDescending(p => p.Id).Take(10).ToListAsync(),
                 RecentProducts = await query.OrderByDescending(p=>p.Id).Take(3).ToListAsync(),
                 TopRatedProducts = await query.OrderByDescending(p=>p.Raiting).Take(3).ToListAsync()
             };

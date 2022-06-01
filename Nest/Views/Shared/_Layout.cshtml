@@ -1,4 +1,10 @@
-﻿<!DOCTYPE html>
+﻿@using Nest.Services
+@inject LayoutServices service 
+@{ 
+    Dictionary<string, string> settings = service.GetSettings();
+    int BasketItemCount = service.GetBasketItemCount();
+}
+<!DOCTYPE html>
 <html class="no-js" lang="en">
 <head>
     <meta charset="utf-8" />
@@ -117,7 +123,7 @@
             <div class="container">
                 <div class="header-wrap">
                     <div class="logo logo-width-1">
-                        <a asp-area="Manage" asp-controller="Dashboard" asp-action="Index"><img src="~/assets/imgs/theme/logo.svg" alt="logo" /></a>
+                        <a asp-area="Manage" asp-controller="Dashboard" asp-action="Index"><img src="~/assets/imgs/theme/@settings["Logo"]" alt="logo" /></a>
                     </div>
                     <div class="header-right">
                         <div class="search-style-2">
@@ -138,52 +144,18 @@
                                     <a href="shop-wishlist.html"><span class="lable">Wishlist</span></a>
                                 </div>
                                 <div class="header-action-icon-2">
-                                    <a class="mini-cart-icon" href="shop-cart.html">
-                                        <img alt="Nest" src="~/assets/imgs/theme/icons/icon-cart.svg" />
-                                        <span class="pro-count blue">2</span>
+                                    <a class="mini-cart-icon" asp-controller="Product" asp-action="Cart">
+                                        <img alt="Nest" src="~/assets/imgs/theme/icons/@settings["CartIcon"]" />
+                                        @if (BasketItemCount > 0)
+                                        {
+                                            <span class="pro-count blue">@BasketItemCount</span>
+                                        }
                                     </a>
-                                    <a href="shop-cart.html"><span class="lable">Cart</span></a>
-                                    <div class="cart-dropdown-wrap cart-dropdown-hm2">
-                                        <ul>
-                                            <li>
-                                                <div class="shopping-cart-img">
-                                                    <a href="shop-product-right.html"><img alt="Nest" src="~/assets/imgs/shop/thumbnail-3.jpg" /></a>
-                                                </div>
-                                                <div class="shopping-cart-title">
-                                                    <h4><a href="shop-product-right.html">Daisy Casual Bag</a></h4>
-                                                    <h4><span>1 × </span>$800.00</h4>
-                                                </div>
-                                                <div class="shopping-cart-delete">
-                                                    <a href="#"><i class="fi-rs-cross-small"></i></a>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div class="shopping-cart-img">
-                                                    <a href="shop-product-right.html"><img alt="Nest" src="~/assets/imgs/shop/thumbnail-2.jpg" /></a>
-                                                </div>
-                                                <div class="shopping-cart-title">
-                                                    <h4><a href="shop-product-right.html">Corduroy Shirts</a></h4>
-                                                    <h4><span>1 × </span>$3200.00</h4>
-                                                </div>
-                                                <div class="shopping-cart-delete">
-                                                    <a href="#"><i class="fi-rs-cross-small"></i></a>
-                                                </div>
-                                            </li>
-                                        </ul>
-                                        <div class="shopping-cart-footer">
-                                            <div class="shopping-cart-total">
-                                                <h4>Total <span>$4000.00</span></h4>
-                                            </div>
-                                            <div class="shopping-cart-button">
-                                                <a href="shop-cart.html" class="outline">View cart</a>
-                                                <a href="shop-checkout.html">Checkout</a>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <a asp-controller="Product" asp-action="Cart"><span class="lable">Cart</span></a>
                                 </div>
                                 <div class="header-action-icon-2">
                                     <a href="page-account.html">
-                                        <img class="svgInject" alt="Nest" src="~/assets/imgs/theme/icons/icon-user.svg" />
+                                        <img class="svgInject" alt="Nest" src="~/assets/imgs/theme/icons/@settings["AccountIcon"]" />
                                     </a>
                                     <a href="page-account.html"><span class="lable ml-0">Account</span></a>
                                     <div class="cart-dropdown-wrap cart-dropdown-hm2 account-dropdown">
@@ -240,7 +212,7 @@
                     </div>
                     <div class="hotline d-none d-lg-flex">
                         <img src="~/assets/imgs/theme/icons/icon-headphone.svg" alt="hotline" />
-                        <p>1900 - 888<span>24/7 Support Center</span></p>
+                        <p>@settings["SupportCenterPhone"]<span>24/7 Support Center</span></p>
                     </div>
                     <div class="header-action-icon-2 d-block d-lg-none">
                         <div class="burger-icon burger-icon-white">
@@ -294,7 +266,7 @@
                                             <h4>Total <span>$383.00</span></h4>
                                         </div>
                                         <div class="shopping-cart-button">
-                                            <a href="shop-cart.html">View cart</a>
+                                            <a asp-controller="Product" asp-action="Cart">View cart</a>
                                             <a href="shop-checkout.html">Checkout</a>
                                         </div>
                                     </div>
@@ -404,11 +376,11 @@
                 <div class="col-xl-4 col-lg-6 text-center d-none d-xl-block">
                     <div class="hotline d-lg-inline-flex mr-30">
                         <img src="~/assets/imgs/theme/icons/phone-call.svg" alt="hotline" />
-                        <p>1900 - 6666<span>Working 8:00 - 22:00</span></p>
+                        <p>@settings["WorkPhone"]<span>Working @settings["WorkingHour"]</span></p>
                     </div>
                     <div class="hotline d-lg-inline-flex">
                         <img src="~/assets/imgs/theme/icons/phone-call.svg" alt="hotline" />
-                        <p>1900 - 8888<span>24/7 Support Center</span></p>
+                        <p>@settings["SupportCenterPhone"]<span>24/7 Support Center</span></p>
                     </div>
                 </div>
                 <div class="col-xl-4 col-lg-6 col-md-6 text-end d-none d-md-block">
