@@ -9,4 +9,10 @@ namespace Nest.Utilies
     {
         public static string ImagePath = "";
     }
+    public enum UserRoles
+    {
+        Admin,
+        Member,
+        Moderator
+    }
 }

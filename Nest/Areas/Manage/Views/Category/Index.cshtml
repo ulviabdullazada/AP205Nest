@@ -78,14 +78,14 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-md-3">
-                    <form method="post" asp-action="Create">
+                    <form method="post" asp-action="Create" enctype="multipart/form-data">
                         <div class="mb-4">
                             <label for="Name" class="form-label">Name</label>
                             <input name="Name" id="Name" type="text" placeholder="Type here" class="form-control" />
                         </div>
                         <div class="mb-4">
-                            <label for="Logo" class="form-label">Logo</label>
-                            <input type="text" name="Logo" placeholder="Type here" class="form-control" id="Logo" />
+                            <label for="Photo" class="form-label">Logo</label>
+                            <input type="file" name="Photo" placeholder="Type here" class="form-control" id="Photo" />
                         </div>
                         <div class="d-grid">
                             <button class="btn btn-primary">Create category</button>
@@ -133,7 +133,7 @@
                                         </div>
                                         <!-- dropdown //end -->
                                     </td>
-                                </tr@(item.IsDeleted==true?"Silinib":"Gorsenir")>
+                                </tr>
                                 }
                             </tbody>
                         </table>

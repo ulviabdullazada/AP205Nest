@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Nest.DAL;
 using Nest.Models;
+using Nest.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,15 +19,25 @@ namespace Nest.ViewComponents
             _context = context;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync(int take=5,int skip =0) 
+        public async Task<IViewComponentResult> InvokeAsync(int page=1) 
         {
+            int pagecount = (int)Math.Ceiling((double) _context.Products.Count() / 10);
+            if (page < 0 || page > pagecount)
+            {
+                page = 1;
+            }
             List<Product> products = await _context.Products.Where(p => p.IsDeleted == false)
-                                    .OrderByDescending(p => p.Id)
-                                    .Skip(skip)
-                                    .Take(take)
+                                    .Skip((page-1)*10)
+                                    .Take(10)
                                     .Include(p => p.ProductImages)
                                     .Include(p => p.Category).ToListAsync();
-            return View(await Task.FromResult(products));
+            PaginateVM<Product> pagination = new PaginateVM<Product>
+            {
+                Items = products,
+                ActivePage = page,
+                PageCount = pagecount
+            };
+            return View(await Task.FromResult(pagination));
         }
     }
 }

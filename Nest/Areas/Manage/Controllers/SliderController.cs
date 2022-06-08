@@ -6,10 +6,12 @@ using System.IO;
 using Nest.Utilies.Extensions;
 using System.Threading.Tasks;
 using Nest.Utilies;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Nest.Areas.Manage.Controllers
 {
     [Area("Manage")]
+    [Authorize(Roles = "Admin")]
     public class SliderController : Controller
     {
         private AppDbContext _context{ get;}

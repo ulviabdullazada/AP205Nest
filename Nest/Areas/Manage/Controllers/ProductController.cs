@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Nest.DAL;
@@ -15,6 +16,7 @@ using System.Threading.Tasks;
 namespace Nest.Areas.Manage.Controllers
 {
     [Area("Manage")]
+    [Authorize(Roles = "Admin")]
     public class ProductController : Controller
     {
         private AppDbContext _context { get; }
@@ -32,7 +34,7 @@ namespace Nest.Areas.Manage.Controllers
                     Id = item.Id,
                     Name = item.Name,
                     Category = item.Category.Name,
-                    Price = item.Price,
+                    Price = item.SellPrice,
                     Image = item.ProductImages.FirstOrDefault(pi=>pi.IsFront==true).Image,
                     IsDeleted = item.IsDeleted
                 };
@@ -59,6 +61,18 @@ namespace Nest.Areas.Manage.Controllers
                 ModelState.AddModelError("Name","This name already exist");
                 return View();
             }
+            if (product.DiscountPrice == null)
+            {
+                product.DiscountPrice = product.SellPrice;
+            }
+            else
+            {
+                if (product.SellPrice < product.DiscountPrice)
+                {
+                    ModelState.AddModelError("DiscountPrice","Malın endirimli qiyməti satış qiymətindən çox ola bilməz");
+                }
+            }
+            product.ProductImages = new List<ProductImage>();
             if (product.Photos != null)
             {
                 foreach (var file in product.Photos)
@@ -80,15 +94,24 @@ namespace Nest.Areas.Manage.Controllers
                     product.ProductImages.Add(image);
                 }
             }
+            if (product.PhotoBack != null)
+            {
+                if (IsPhotoOk(product.PhotoBack) != "")
+                {
+                    ModelState.AddModelError("PhotoBack", IsPhotoOk(product.PhotoBack));
+                }
+                product.ProductImages.Add(new ProductImage
+                {
+                    Image = await product.PhotoBack.SaveFileAsync(Path.Combine(Constant.ImagePath, "shop")),
+                    IsFront = false,
+                    IsBack = true,
+                    Product = product
+                });
+            }
             if (IsPhotoOk(product.PhotoFront) != "")
             {
                 ModelState.AddModelError("PhotoFront", IsPhotoOk(product.PhotoFront));
             }
-            if (IsPhotoOk(product.PhotoBack) != "")
-            {
-                ModelState.AddModelError("PhotoBack", IsPhotoOk(product.PhotoBack));
-            }
-            product.ProductImages = new List<ProductImage>();
             product.ProductImages.Add(new ProductImage
             {
                 Image = await product.PhotoFront.SaveFileAsync(Path.Combine(Constant.ImagePath, "shop")),
@@ -96,13 +119,7 @@ namespace Nest.Areas.Manage.Controllers
                 IsBack = false,
                 Product = product
             });
-            product.ProductImages.Add(new ProductImage
-            {
-                Image = await product.PhotoBack.SaveFileAsync(Path.Combine(Constant.ImagePath, "shop")),
-                IsFront = false,
-                IsBack = true,
-                Product = product
-            });
+            
             
             
             _context.Products.Add(product);

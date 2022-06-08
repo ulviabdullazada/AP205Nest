@@ -89,14 +89,34 @@
                         <div class="row">
                             <div class="col-lg-4">
                                 <div class="mb-4">
-                                    <label asp-for="Price" class="form-label"></label>
+                                    <label asp-for="CostPrice" class="form-label">Maya dəyəri</label>
                                     <div class="row gx-2">
-                                        <input placeholder="₼" asp-for="Price" class="form-control" />
-                                        <span class="text-danger" asp-validation-for="Price"></span>
+                                        <input placeholder="₼" asp-for="CostPrice" class="form-control" />
+                                        <span class="text-danger" asp-validation-for="CostPrice"></span>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-lg-4">
+                                <div class="mb-4">
+                                    <label asp-for="SellPrice" class="form-label">Satış qiyməti</label>
+                                    <div class="row gx-2">
+                                        <input placeholder="₼" asp-for="SellPrice" class="form-control" />
+                                        <span class="text-danger" asp-validation-for="SellPrice"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="mb-4">
+                                    <label asp-for="DiscountPrice" class="form-label">Endirimli qiymət (yoxdursa boş saxlayın)</label>
+                                    <div class="row gx-2">
+                                        <input placeholder="₼" asp-for="DiscountPrice" class="form-control" />
+                                        <span class="text-danger" asp-validation-for="DiscountPrice"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6">
                                 <div class="mb-4">
                                     <label asp-for="StockCount" class="form-label"></label>
                                     <div class="row gx-2">
@@ -105,7 +125,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-4">
+                            <div class="col-lg-6">
                                 <div class="mb-4">
                                     <label asp-for="Raiting" class="form-label"></label>
                                     <div class="row gx-2">

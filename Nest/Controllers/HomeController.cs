@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Nest.DAL;
 using Nest.Models;
 using Nest.ViewModels;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -17,13 +18,14 @@ namespace Nest.Controllers
         }
         public async Task<IActionResult> Index()
         {
-            IQueryable<Product> query = _context.Products.Include(p => p.ProductImages).Include(p => p.Category).AsQueryable();
             HomeVM homeVM = new HomeVM()
             {
                 Sliders = await _context.Sliders.ToListAsync(),
-                Categories = await _context.Categories.Where(c=>c.IsDeleted==false).ToListAsync(),
-                RecentProducts = await query.OrderByDescending(p=>p.Id).Take(3).ToListAsync(),
-                TopRatedProducts = await query.OrderByDescending(p=>p.Raiting).Take(3).ToListAsync()
+                PopularCategories = await _context.Categories.Where(c=>c.IsDeleted==false).OrderByDescending(c=>c.Products.Count).Take(5).ToListAsync(),
+                RandomCategories = await _context.Categories.Where(c=>c.IsDeleted==false).OrderBy(c => Guid.NewGuid()).Take(10).Include(c=>c.Products).ToListAsync(),
+                Products = await _context.Products.OrderByDescending(p => p.StockCount).Where(p=>p.StockCount>0).Take(10).Include(p => p.ProductImages).Include(p => p.Category).ToListAsync(),
+                RecentProducts = await _context.Products.OrderByDescending(p => p.Id).Take(3).Include(p => p.ProductImages).Include(p => p.Category).ToListAsync(),
+                TopRatedProducts = await _context.Products.OrderByDescending(p => p.Raiting).Take(3).Include(p => p.ProductImages).Include(p => p.Category).ToListAsync()
             };
             return View(homeVM);
         }

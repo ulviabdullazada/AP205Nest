@@ -5,11 +5,30 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20220523142924_CreateSliderTable.cs" />
+    <Compile Remove="Migrations\20220523142924_CreateSliderTable.Designer.cs" />
+    <Compile Remove="Migrations\20220523151306_CreatedCategoriesTable.cs" />
+    <Compile Remove="Migrations\20220523151306_CreatedCategoriesTable.Designer.cs" />
+    <Compile Remove="Migrations\20220523152657_CreatedProductTable.cs" />
+    <Compile Remove="Migrations\20220523152657_CreatedProductTable.Designer.cs" />
+    <Compile Remove="Migrations\20220523153149_CreatedProductImagesTable.cs" />
+    <Compile Remove="Migrations\20220523153149_CreatedProductImagesTable.Designer.cs" />
     <Compile Remove="Migrations\20220523154452_AddDefaultValueProductImages.cs" />
     <Compile Remove="Migrations\20220523154452_AddDefaultValueProductImages.Designer.cs" />
+    <Compile Remove="Migrations\20220524122539_AddedIsDeletedColumnToCategory.cs" />
+    <Compile Remove="Migrations\20220524122539_AddedIsDeletedColumnToCategory.Designer.cs" />
+    <Compile Remove="Migrations\20220601105325_CreatedSettingsTable.cs" />
+    <Compile Remove="Migrations\20220601105325_CreatedSettingsTable.Designer.cs" />
+    <Compile Remove="Migrations\20220602110842_AddedPriceVariantsToProduct.cs" />
+    <Compile Remove="Migrations\20220602110842_AddedPriceVariantsToProduct.Designer.cs" />
+    <Compile Remove="Migrations\20220602111218_RenameDiscountColumnOnProduct.cs" />
+    <Compile Remove="Migrations\20220602111218_RenameDiscountColumnOnProduct.Designer.cs" />
+    <Compile Remove="Migrations\20220602115346_FirstMigration.cs" />
+    <Compile Remove="Migrations\20220602115346_FirstMigration.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.25" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.25" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.25" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.25">

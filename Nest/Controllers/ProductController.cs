@@ -19,10 +19,11 @@ namespace Nest.Controllers
         {
             _context = context;
         }
-        public IActionResult Index()
+        public IActionResult Index(int? page)
         {
             //HttpContext.Session.SetString("Name", "Mehemmed");
-            ViewBag.ProductCount = _context.Products.Where(p => p.IsDeleted == false).Count();
+            //ViewBag.ProductCount = _context.Products.Where(p => p.IsDeleted == false).Count();
+            ViewBag.Page = page;
             ViewBag.Categories = _context.Categories.Where(p => p.IsDeleted == false).Include(c=>c.Products);
             return View();
         }
@@ -37,12 +38,7 @@ namespace Nest.Controllers
                     message="Agilli ol"
                 });
             }
-            return PartialView("_ProductPartial", p
-                                    .OrderByDescending(p => p.Id)
-                                    .Skip(skip)
-                                    .Take(10)
-                                    .Include(p => p.ProductImages)
-                                    .Include(p => p.Category));
+            return ViewComponent("Product", new { skip = skip});
             //return Json(_context.Products.Select(p=> new { p.Name, p.Id,p.IsDeleted,p.StockCount,p.Raiting,p.Price})
             //    .Where(p => p.IsDeleted == false)
             //    .OrderByDescending(p => p.Id).Skip(10).Take(10));
@@ -68,7 +64,7 @@ namespace Nest.Controllers
                     ProductId = dbProduct.Id,
                     Image = dbProduct.ProductImages.FirstOrDefault(pi => pi.IsFront).Image,
                     Name = dbProduct.Name,
-                    Price = dbProduct.Price,
+                    Price = dbProduct.SellPrice,
                     Raiting = dbProduct.Raiting,
                     IsActive = dbProduct.StockCount>0?true:false,
                     Count = item.Count

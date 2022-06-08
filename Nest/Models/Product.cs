@@ -12,7 +12,10 @@ namespace Nest.Models
         public string Name { get; set; }
         public string Description { get; set; }
         [Required]
-        public double Price { get; set; }
+        public double SellPrice { get; set; }
+        [Required]
+        public double CostPrice { get; set; }
+        public double? DiscountPrice { get; set; }
         public float Raiting { get; set; }
         [Required]
         public int StockCount { get; set; }
@@ -23,7 +26,7 @@ namespace Nest.Models
         public List<ProductImage> ProductImages { get; set; }
         [NotMapped]
         public List<IFormFile> Photos { get; set; }
-        [NotMapped]
+        [Required,NotMapped]
         public IFormFile PhotoFront { get; set; }
         [NotMapped]
         public IFormFile PhotoBack { get; set; }
